@@ -1,0 +1,16 @@
+# maven repo
+.m2
+
+# Compiled files #
+target
+
+
+*.log
+
+# OS generated files #
+.idea/
+*.iml
+atlassian-ide-plugin.xml
+phantomjsdriver.log
+
+
