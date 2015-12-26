@@ -30,6 +30,7 @@ class Customer {
             if (!outputColorMap.containsKey(colorCode) && PaintMaker.GLOSSY.equals(finishCode)) {
                 outputColorMap.put(colorCode, PaintMaker.GLOSSY);
                 this.customerChoice = new CustomerChoice(colorCode, PaintMaker.GLOSSY);
+                return this.customerChoice;
             }
             customerChoices.push(new CustomerChoice(colorCode, finishCode));
         }
@@ -38,9 +39,10 @@ class Customer {
             if (!outputColorMap.containsKey(customerChoice.getColorCode())) {
                 outputColorMap.put(customerChoice.getColorCode(), customerChoice.getFinishCode());
                 this.customerChoice = new CustomerChoice(customerChoice.getColorCode(), customerChoice.getFinishCode());
+                return this.customerChoice;
             }
         }
-        return customerChoice;
+        return null;
 
     }
 
