@@ -56,9 +56,9 @@ public class PaintMaker {
                     while (retryCount < customersQueue.size() && !newChoiceFound) {
                         retryCount++;
                         Customer previousCustomer = customersQueue.remove();
-                        CustomerChoice newChoice = previousCustomer.searchBestOptionForCustomer(numberOfColors, outputColorMap);
-                        if (newChoice != null) {
-                            outputColorMap.remove(previousCustomer.getCustomerChoice().getColorCode());
+                        CustomerChoice previousCustomerChoice = previousCustomer.getCustomerChoice();
+                        if (previousCustomer.searchBestOptionForCustomer(numberOfColors, outputColorMap) != null) {
+                            outputColorMap.remove(previousCustomerChoice.getColorCode());
                             newChoiceFound = true;
                         }
                         customersQueue.add(previousCustomer);
