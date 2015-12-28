@@ -1,9 +1,12 @@
 package com.paint.shop;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -15,11 +18,10 @@ public class PaintMaker {
     public static final String SPACE = " ";
     public static final Integer MATTE = 1;
     public static final Integer GLOSSY = 0;
-    private List<PaintShopResult> paintMakerOutputList = Lists.newArrayList();
+    private List<PaintShopResult> paintMakerOutputList = new ArrayList();
 
-    public String processCustomerInput(String filename) {
-
-        try (Scanner customerInputScanner = new Scanner(this.getClass().getClassLoader().getResourceAsStream(filename))) {
+    public String processCustomerInput(InputStream inputFileStream) {
+        try (Scanner customerInputScanner = new Scanner(inputFileStream)) {
             int numberOfCases = customerInputScanner.nextInt();
             for (int caseCounter = 1; caseCounter <= numberOfCases; caseCounter++) {
                 findPaintCombinationForCase(customerInputScanner, caseCounter);
@@ -29,7 +31,7 @@ public class PaintMaker {
     }
 
     private void findPaintCombinationForCase(Scanner input, int caseCounter) {
-        Map<Integer, Integer> outputColorMap = Maps.newHashMap();
+        Map<Integer, Integer> outputColorMap = new HashMap();
         int numberOfColors = input.nextInt();
         int numberOfCustomers = input.nextInt();
         input.nextLine();
@@ -39,31 +41,31 @@ public class PaintMaker {
         }
         Queue<Customer> customersQueue = new ArrayDeque<>();
         int customerCount = 0;
+
+        boolean possible = true;
         while (customerCount < numberOfCustomers) {
             customerCount++;
             final String customerPreferenceInput = input.nextLine();
             boolean matchFound = false;
-            boolean possible = true;
-            while (!matchFound && possible) {
+            int retryCount = 0;
+            while (!matchFound && possible && retryCount <= customersQueue.size()) {
                 final Customer customer = new Customer(customerPreferenceInput);
                 CustomerChoice bestMatchForCustomer = customer.searchBestOptionForCustomer(numberOfColors, outputColorMap);
                 if (bestMatchForCustomer != null) {
                     customersQueue.add(customer);
                     matchFound = true;
                 } else {
-                    int retryCount = 0;
-                    boolean newChoiceFound = false;
-                    while (retryCount < customersQueue.size() && !newChoiceFound) {
-                        retryCount++;
-                        Customer previousCustomer = customersQueue.remove();
-                        CustomerChoice previousCustomerChoice = previousCustomer.getCustomerChoice();
-                        if (previousCustomer.searchBestOptionForCustomer(numberOfColors, outputColorMap) != null) {
-                            outputColorMap.remove(previousCustomerChoice.getColorCode());
-                            newChoiceFound = true;
-                        }
-                        customersQueue.add(previousCustomer);
 
+                    boolean newChoiceFound = false;
+
+                    Customer previousCustomer = customersQueue.remove();
+                    CustomerChoice previousCustomerChoice = previousCustomer.getCustomerChoice();
+                    if (previousCustomer.searchBestOptionForCustomer(numberOfColors, outputColorMap) != null) {
+                        outputColorMap.remove(previousCustomerChoice.getColorCode());
+                        newChoiceFound = true;
                     }
+                    customersQueue.add(previousCustomer);
+
                     if (!newChoiceFound) {
                         possible = false;
                         paintMakerOutputList.add(new PaintShopResult(caseCounter, IMPOSSIBLE));
@@ -100,5 +102,14 @@ public class PaintMaker {
         return responseBuffer.toString();
     }
 
+    public static void main(String[] args) {
+        String inputFileName = args[0];
+        try {
+            System.out.println(new PaintMaker().processCustomerInput(new FileInputStream(new File(inputFileName))));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
