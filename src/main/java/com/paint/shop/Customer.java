@@ -18,7 +18,7 @@ class Customer {
         return customerChoice;
     }
 
-    public CustomerChoice searchBestOptionForCustomer(int numberOfColors, Map<Integer, Integer> outputColorMap) {
+    public CustomerChoice searchBestOptionForCustomer(int numberOfColors, Map<Integer, Integer> outputColorMap, boolean firstPass) {
         Scanner preferenceInputLineScanner = new Scanner(customerPreferencePairs).useDelimiter(PaintMaker.SPACE);
         int numberOfOptions = preferenceInputLineScanner.nextInt();
         Stack<CustomerChoice> customerChoices = new Stack<>();
@@ -30,6 +30,9 @@ class Customer {
             if (!outputColorMap.containsKey(colorCode) && PaintMaker.GLOSSY.equals(finishCode)) {
                 outputColorMap.put(colorCode, PaintMaker.GLOSSY);
                 this.customerChoice = new CustomerChoice(colorCode, PaintMaker.GLOSSY);
+                return this.customerChoice;
+            }else if(outputColorMap.containsKey(colorCode) && outputColorMap.get(colorCode).equals(finishCode) && firstPass){
+                this.customerChoice = new CustomerChoice(colorCode, finishCode);
                 return this.customerChoice;
             }
             customerChoices.push(new CustomerChoice(colorCode, finishCode));

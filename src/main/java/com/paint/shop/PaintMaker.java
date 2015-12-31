@@ -35,10 +35,7 @@ public class PaintMaker {
         int numberOfColors = input.nextInt();
         int numberOfCustomers = input.nextInt();
         input.nextLine();
-        if (numberOfCustomers > numberOfColors) {
-            paintMakerOutputList.add(new PaintShopResult(caseCounter, IMPOSSIBLE));
-            return;
-        }
+
         Queue<Customer> customersQueue = new ArrayDeque<>();
         int customerCount = 0;
 
@@ -50,22 +47,20 @@ public class PaintMaker {
             int retryCount = 0;
             while (!matchFound && possible && retryCount <= customersQueue.size()) {
                 final Customer customer = new Customer(customerPreferenceInput);
-                CustomerChoice bestMatchForCustomer = customer.searchBestOptionForCustomer(numberOfColors, outputColorMap);
+                CustomerChoice bestMatchForCustomer = customer.searchBestOptionForCustomer(numberOfColors, outputColorMap, true);
                 if (bestMatchForCustomer != null) {
                     customersQueue.add(customer);
                     matchFound = true;
                 } else {
-
                     boolean newChoiceFound = false;
-
                     Customer previousCustomer = customersQueue.remove();
                     CustomerChoice previousCustomerChoice = previousCustomer.getCustomerChoice();
-                    if (previousCustomer.searchBestOptionForCustomer(numberOfColors, outputColorMap) != null) {
+                    final CustomerChoice newCustomerChoice = previousCustomer.searchBestOptionForCustomer(numberOfColors, outputColorMap, false);
+                    if (newCustomerChoice != null && newCustomerChoice.getColorCode() != previousCustomerChoice.getColorCode() ) {
                         outputColorMap.remove(previousCustomerChoice.getColorCode());
                         newChoiceFound = true;
                     }
                     customersQueue.add(previousCustomer);
-
                     if (!newChoiceFound) {
                         possible = false;
                         paintMakerOutputList.add(new PaintShopResult(caseCounter, IMPOSSIBLE));
