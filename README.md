@@ -21,7 +21,7 @@ run
  than
 Simply provide the input file location as argument to the below command
 
-mvn exec:java -Dexec.mainClass="com.paint.shop.PaintMaker" -Dexec.args="{absolute path of the test input file}"
+`mvn exec:java -Dexec.mainClass="com.paint.shop.PaintMaker" -Dexec.args="{absolute path of the test input file}"`
  
 You can expect an output as shown below 
  ```
