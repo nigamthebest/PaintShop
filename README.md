@@ -15,7 +15,10 @@ It also marks the case as IMPOSSIBLE if the it has already traversed the entire 
  
 
 
-To test the Algorithm
+##To test the Algorithm
+run
+ `mvn install`
+ than
 Simply provide the input file location as argument to the below command
 
 mvn exec:java -Dexec.mainClass="com.paint.shop.PaintMaker" -Dexec.args="{absolute path of the test input file}"
