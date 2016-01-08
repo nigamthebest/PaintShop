@@ -21,7 +21,7 @@ Simply provide the input file location as argument to the below command
 mvn exec:java -Dexec.mainClass="com.paint.shop.PaintMaker" -Dexec.args="{absolute path of the test input file}"
  
 You can expect an output as shown below 
- '''
+ ```
    mvn exec:java -Dexec.mainClass="com.paint.shop.PaintMaker" -Dexec.args="c:\test123.txt"
   [INFO] Scanning for projects...
   [INFO]
@@ -42,7 +42,7 @@ You can expect an output as shown below
   [INFO] Finished at: 2016-01-08T13:25:44+02:00
   [INFO] Final Memory: 11M/309M
   [INFO] ------------------------------------------------------------------------
-'''
+```
 
 
 
