@@ -56,7 +56,7 @@ public class PaintMaker {
                     Customer previousCustomer = customersQueue.remove();
                     CustomerChoice previousCustomerChoice = previousCustomer.getCustomerChoice();
                     final CustomerChoice newCustomerChoice = previousCustomer.searchBestOptionForCustomer(numberOfColors, outputColorMap, false);
-                    if (newCustomerChoice != null && newCustomerChoice.getColorCode() != previousCustomerChoice.getColorCode() ) {
+                    if (newCustomerChoice != null && newCustomerChoice.getColorCode() != previousCustomerChoice.getColorCode()) {
                         outputColorMap.remove(previousCustomerChoice.getColorCode());
                         newChoiceFound = true;
                     }
@@ -79,6 +79,7 @@ public class PaintMaker {
         paintMakerOutputList.stream()
                 .forEach(paintShopResult -> responseBuffer.append("Case #")
                         .append(paintShopResult.getCaseNumber())
+                        .append(":")
                         .append(SPACE)
                         .append(paintShopResult.getResponse())
                         .append("\n"));
@@ -89,9 +90,11 @@ public class PaintMaker {
         StringBuffer responseBuffer = new StringBuffer();
         for (int colorCounter = 1; colorCounter <= numberOfColors; colorCounter++) {
             if (outputColorMap.containsKey(colorCounter)) {
-                responseBuffer.append(SPACE).append(outputColorMap.get(colorCounter));
+                responseBuffer = (colorCounter == 1) ? responseBuffer.append(outputColorMap.get(colorCounter)) :
+                        responseBuffer.append(SPACE).append(outputColorMap.get(colorCounter));
             } else {
-                responseBuffer.append(SPACE).append(GLOSSY);
+                responseBuffer = (colorCounter == 1) ? responseBuffer.append(GLOSSY) :
+                        responseBuffer.append(SPACE).append(GLOSSY);
             }
         }
         return responseBuffer.toString();
